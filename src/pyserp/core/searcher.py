@@ -100,7 +100,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
     @configured_validate_call
     async def search_one(self, query: str, start: int = 0, params: dict | None = None,
                          headers: dict | None = None, cookies: dict | None = None,
-                         proxy: str | None = None, tries: int | None = None
+                         proxy: str | None = None, tries: PositiveInt | None = None
                          ) -> SERP_Specific_Type | ErrorModel:
         """
         Performs a search for a single page of results.
@@ -115,7 +115,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
             headers (dict | None): Custom HTTP headers.
             cookies (dict | None): Custom cookies.
             proxy (str | None): Proxy URL to use for this specific request.
-            tries (int | None): Number of retry attempts (default is 3).
+            tries (PositiveInt | None): Number of retry attempts (default is 3).
 
         Returns:
             SERP_Specific_Type | ErrorModel: The parsed result model if successful,
@@ -146,7 +146,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
     async def search_many_gen(self, query: str, starts: list[int] | None = None,
                               params: dict | None = None, headers: dict | None = None,
                               cookies: dict | None = None, proxy: str | None = None,
-                              tries: int | None = None, in_order: bool | None = None
+                              tries: PositiveInt | None = None, in_order: bool | None = None
                               ) -> AsyncGenerator[SERP_Specific_Type | ErrorModel]:
         """
         Asynchronously yields search results for multiple pages (offsets).
@@ -159,7 +159,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
             headers (dict | None): Custom HTTP headers.
             cookies (dict | None): Custom cookies.
             proxy (str | None): Proxy URL.
-            tries (int | None): Number of retry attempts.
+            tries (PositiveInt | None): Number of retry attempts.
             in_order (bool | None): If True (default), yields results in the order
                 of `starts`. If False, yields results as soon as they are available.
 
@@ -189,7 +189,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
     async def search_many(self, query: str, starts: list[int] | None = None,
                           params: dict | None = None, headers: dict | None = None,
                           cookies: dict | None = None, proxy: str | None = None,
-                          tries: int | None = None,
+                          tries: PositiveInt | None = None,
                           in_order: bool | None = None) -> SearchManyResultModel[SERP_Specific_Type]:
         """
         Fetches multiple pages and returns them as a single list model.
@@ -213,7 +213,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
 
     async def _search_top_gen(self, query: str, params: dict | None = None,
                               headers: dict | None = None, cookies: dict | None = None,
-                              proxy: str | None = None, tries: int | None = None,
+                              proxy: str | None = None, tries: PositiveInt | None = None,
                               in_order: bool | None = None,
                               pages_per_time_default: PositiveInt | None = None
                               ) -> AsyncGenerator[SERP_Specific_Type | ErrorModel]:
@@ -244,7 +244,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
     @configured_validate_call
     async def search_top_gen(self, query: str, limit: int, params: dict | None = None,
                              headers: dict | None = None, cookies: dict | None = None,
-                             proxy: str | None = None, tries: int | None = None,
+                             proxy: str | None = None, tries: PositiveInt | None = None,
                              in_order: bool | None = None,
                              pages_per_time_default: PositiveInt | None = None,
                              ignore_page_errors: bool | None = None,
@@ -294,7 +294,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
 
     async def search_top(self, query: str, limit: int, params: dict | None = None,
                          headers: dict | None = None, cookies: dict | None = None,
-                         proxy: str | None = None, tries: int | None = None,
+                         proxy: str | None = None, tries: PositiveInt | None = None,
                          in_order: bool | None = None,
                          pages_per_time_default: PositiveInt | None = None,
                          ignore_page_errors: bool | None = None,
