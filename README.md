@@ -77,3 +77,10 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 The library offers much more than this. Full documentation will be added in the future.
+
+## Testing
+Requires pytest:
+```bash
+pip install -U pytest
+python -m pytest
+```
