@@ -56,7 +56,7 @@ class BSERP_Parser(SERP_Parser_Base[BSERP_Model]):
                     raise type(e)(f"Error while parsing url and title <- {e}")
                 try:
                     info_item = li.find("p", class_="b_lineclamp2")
-                    snippet_items = info_item.find_all(text=True, recursive=False)
+                    snippet_items = info_item.find_all(string=True, recursive=False)
                     result["snippet"] = " ".join([snippet_item.text for snippet_item in snippet_items])
                     time_item = info_item.find("span", class_="news_dt")
                     if time_item:
