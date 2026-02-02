@@ -237,7 +237,7 @@ class SearchSessionsManagerBase(ABC, Generic[SearchSessionType]):
                 has_session_proxy = True
 
         if has_session_proxy and proxies:
-            warnings.warn("If you pass proxies to the search session manager constructor, you should not add proxies at the aiohttp session level — the latter will be ignored.")
+            warnings.warn("If you pass proxies to the search session manager constructor, you should not add proxies at the aiohttp session level -- the latter will be ignored.")
 
         self._switch_period = switch_period or 3
         self._calls_count = 0
