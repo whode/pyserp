@@ -51,7 +51,8 @@ class GoogleSearchSessionsManager(SearchSessionsManagerBase[GoogleSearchSession]
 
     Applies specific defaults:
     - User-Agent: Targeted to trigger GSERPv2 layout (often more stable/less captcha-prone).
-    - Cookies: Pre-set 'CONSENT' and 'SOCS' cookies to bypass the GDPR consent page.
+    - Cookies: Optional defaults to bypass the GDPR consent page when
+      apply_default_cookies=True is explicitly set.
     """
     _headers_default = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.2; WOW64; Trident/7.0; rv:11.0) like Gecko"
