@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "pyserp"
 dynamic = ["version"]
 authors = [
-  { name = "Whode", email = "whode@users.noreply.github.com" },
+  { name = "Whode", email = "60185573+whode@users.noreply.github.com" },
 ]
 description = "A comprehensive asynchronous library for scraping and parsing Search Engine Results Pages (SERPs)."
 readme = "README.md"
