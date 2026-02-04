@@ -86,7 +86,7 @@ The library offers much more than this. Full documentation will be added in the 
 ## Development & Testing
 
 Tests are included in the source repository only (not in the PyPI package).
-To run tests, first follow [these](#from-source-development) steps. Then:
+To run tests, first follow the steps in "From Source (Development)" above. Then:
 
 ```bash
 pip install -U pytest
