@@ -2,6 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/pyserp)](https://pypi.org/project/pyserp/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/pyserp)](https://pypi.org/project/pyserp/)
+[![Workflow Status](https://img.shields.io/github/actions/workflow/status/whode/pyserp/ci.yml?branch=main)](https://github.com/whode/pyserp/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/whode/pyserp)](LICENSE)
 
 PySerp is an asynchronous Python library for automated, flexibly configurable scraping and parsing of Search Engine Results Pages (SERPs).
