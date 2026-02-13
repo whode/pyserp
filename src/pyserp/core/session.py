@@ -206,6 +206,7 @@ class SearchSessionsManagerBase(ABC, Generic[SearchSessionType]):
                 before rotating to the next one. Defaults to 3.
         """
         self._sessions = sessions or []
+        proxies_provided = proxies is not None
         proxies = proxies or [None]
         if not self._sessions:
             for _ in range(len(proxies)):
@@ -239,7 +240,7 @@ class SearchSessionsManagerBase(ABC, Generic[SearchSessionType]):
             if self._sessions[i]._default_proxy and not has_session_proxy:
                 has_session_proxy = True
 
-        if has_session_proxy and proxies:
+        if has_session_proxy and proxies_provided:
             warnings.warn("If you pass proxies to the search session manager constructor, you should not add proxies at the aiohttp session level -- the latter will be ignored.")
 
         self._switch_period = switch_period or 3
