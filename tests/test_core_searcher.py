@@ -8,6 +8,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest import IsolatedAsyncioTestCase
 
+from pydantic import ValidationError
+
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:
@@ -161,3 +163,43 @@ class SearcherBaseTests(IsolatedAsyncioTestCase):
         results = [page async for page in searcher.search_top_gen("query", limit=5)]
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], ErrorModel)
+
+    async def test_search_top_gen_rejects_zero_limit(self):
+        manager = DummySessionsManager(DummySearchSession([]))
+        parser = DummyParser(result=None)
+        searcher = DummySearcher(manager, parser, asyncio.Semaphore(1))
+
+        with self.assertRaises(ValidationError):
+            async for _ in searcher.search_top_gen("query", limit=0):
+                pass
+
+    async def test_search_top_rejects_zero_limit(self):
+        manager = DummySessionsManager(DummySearchSession([]))
+        parser = DummyParser(result=None)
+        searcher = DummySearcher(manager, parser, asyncio.Semaphore(1))
+
+        with self.assertRaises(ValidationError):
+            await searcher.search_top("query", limit=0)
+
+    async def test_search_top_gen_starts_do_not_exceed_limit(self):
+        class BoundedStartsSearcher(DummySearcher):
+            @staticmethod
+            def _serp_organic_results_limit():
+                return 25
+
+            async def search_many_gen(self, query: str, starts: list[int] | None = None, *args, **kwargs):
+                for start in starts or []:
+                    yield start
+
+        manager = DummySessionsManager(DummySearchSession([]))
+        parser = DummyParser(result=None)
+        searcher = BoundedStartsSearcher(
+            manager,
+            parser,
+            asyncio.Semaphore(1),
+            results_per_page=10,
+            pages_per_time_default=2,
+        )
+
+        starts = [start async for start in searcher._search_top_gen("query")]
+        self.assertEqual(starts, [0, 10, 20])

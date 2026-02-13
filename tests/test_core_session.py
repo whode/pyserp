@@ -169,3 +169,36 @@ class SearchSessionBaseTests(IsolatedAsyncioTestCase):
         finally:
             await session_one.close()
             await session_two.close()
+
+    async def test_sessions_manager_warns_about_session_proxy_only_when_proxies_arg_provided(self):
+        class DummyManagedSession:
+            def __init__(self, session, params=None, headers=None, cookies=None, proxy=None, ssl=None):
+                self.session = session
+                self.proxy = proxy
+                self._initialized = False
+
+            @property
+            def initialized(self):
+                return self._initialized
+
+            async def initialize_cookies(self, *args, **kwargs):
+                self._initialized = True
+
+        class DummySessionsManager(SearchSessionsManagerBase[DummyManagedSession]):
+            _SearchSession = DummyManagedSession
+            _headers_default = {}
+            _cookies_default = {}
+
+        session = aiohttp.ClientSession(proxy="http://127.0.0.1:8080")
+        try:
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always")
+                DummySessionsManager(sessions=[session])
+                self.assertFalse(any("If you pass proxies" in str(w.message) for w in caught))
+
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always")
+                DummySessionsManager(sessions=[session], proxies=["http://1.1.1.1:80"])
+                self.assertTrue(any("If you pass proxies" in str(w.message) for w in caught))
+        finally:
+            await session.close()
