@@ -242,7 +242,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
                 yield page
 
     @configured_validate_call
-    async def search_top_gen(self, query: str, limit: int, params: dict | None = None,
+    async def search_top_gen(self, query: str, limit: PositiveInt, params: dict | None = None,
                              headers: dict | None = None, cookies: dict | None = None,
                              proxy: str | None = None, tries: PositiveInt | None = None,
                              in_order: bool | None = None,
@@ -258,7 +258,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
 
         Args:
             query (str): The search query.
-            limit (int): The maximum number of organic results to collect.
+            limit (PositiveInt): The maximum number of organic results to collect.
             params, headers, cookies, proxy, tries, in_order: See `search_one`.
             pages_per_time_default (PositiveInt | None): Override the default batch size.
             ignore_page_errors (bool | None): If True, continues searching even if a page fails.
@@ -292,7 +292,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
             if results_count >= limit:
                 break
 
-    async def search_top(self, query: str, limit: int, params: dict | None = None,
+    async def search_top(self, query: str, limit: PositiveInt, params: dict | None = None,
                          headers: dict | None = None, cookies: dict | None = None,
                          proxy: str | None = None, tries: PositiveInt | None = None,
                          in_order: bool | None = None,
@@ -306,7 +306,7 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
 
         Args:
             query (str): The search query.
-            limit (int): The maximum number of organic results to collect.
+            limit (PositiveInt): The maximum number of organic results to collect.
             params, headers, cookies, proxy, tries, in_order: See `search_top_gen`.
             pages_per_time_default, ignore_page_errors, include_page_errors: See `search_top_gen`.
 
