@@ -16,6 +16,7 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
+from pyserp.core.exceptions.base import BaseError
 from pyserp.core.exceptions.session import StatusCodeError
 from pyserp.core.session import SearchSessionBase, SearchSessionsManagerBase
 from pyserp.providers.bing.session import BingSearchSession
@@ -54,6 +55,14 @@ class DummySearchSession(SearchSessionBase):
 
 class SearchSessionBaseTests(IsolatedAsyncioTestCase):
     """Behavioral tests for SearchSessionBase and session managers."""
+    def test_base_error_str_equals_message(self):
+        error = BaseError("message", debug_info={"key": "value"})
+        self.assertEqual(str(error), "message")
+
+    def test_status_code_error_str_equals_message(self):
+        error = StatusCodeError(429, "Too Many Requests")
+        self.assertEqual(str(error), "Status code is 429: Too Many Requests.")
+
     async def test_initialize_cookies_sets_initialized(self):
         session = aiohttp.ClientSession()
         try:
