@@ -77,7 +77,7 @@ async def main():
         for page in search_top_result.pages:
             for result in page.results.organic:
                 print(result.title, result.url, sep="\n", end="\n\n")
-
+    await manager.close()
 
 if __name__ == "__main__":
     asyncio.run(main())
