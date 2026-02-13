@@ -236,7 +236,9 @@ class SearcherBase(ABC, Generic[SearchSessionType, SERP_Specific_Type]):
 
         step = results_per_page * pages_per_time
         for skip in range(0, self._serp_organic_results_limit(), step):
-            starts = list(range(skip, skip + step, results_per_page))
+            starts = list(range(skip,
+                                min(skip + step, self._serp_organic_results_limit()),
+                                results_per_page))
             search_gen = self.search_many_gen(query, starts, params, headers, cookies, proxy, tries, in_order)
             async for page in search_gen:
                 yield page
