@@ -54,3 +54,21 @@ class GoogleParserTests(TestCase):
 
         with self.assertRaises(UnknownLayoutError):
             parser.parse_serp(html)
+
+    def test_parse_serp_missing_title_raises_unknown_layout(self):
+        executor = ThreadPoolExecutor(max_workers=1)
+        self.addCleanup(executor.shutdown, wait=True)
+        parser = GSERP_Parser(executor)
+        html = b"<html><body><div></div></body></html>"
+
+        with self.assertRaises(UnknownLayoutError):
+            parser.parse_serp(html)
+
+    def test_parse_serp_missing_body_raises_unknown_layout(self):
+        executor = ThreadPoolExecutor(max_workers=1)
+        self.addCleanup(executor.shutdown, wait=True)
+        parser = GSERP_Parser(executor)
+        html = b"<html><head><title>Other</title></head></html>"
+
+        with self.assertRaises(UnknownLayoutError):
+            parser.parse_serp(html)

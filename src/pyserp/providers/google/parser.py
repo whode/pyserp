@@ -309,12 +309,14 @@ class GSERP_Parser(SERP_Parser_Base[GSERP_Model]):
             raise EmptyPageError
 
         bpage = bs(serp_html.decode(errors="replace"), "lxml")
-        if bpage.title.text == "Google Search":
+        title = bpage.title.get_text(strip=True) if bpage.title else ""
+        if title == "Google Search":
             raise JsCaptchaError(serp_html)
 
-        if bpage.body.has_attr("class") and "srp" in bpage.body.attrs["class"]:
+        body = bpage.body
+        if body and body.has_attr("class") and "srp" in body.attrs["class"]:
             parser = self.parse_serp_v3
-        elif bpage.body.contents[1].name == "header":
+        elif body and len(body.contents) > 1 and getattr(body.contents[1], "name", None) == "header":
             parser = self.parse_serp_v2
         elif bpage.find("div", class_="n692Zd"):
             parser = self.parse_serp_v1
