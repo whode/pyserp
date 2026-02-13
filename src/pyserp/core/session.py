@@ -89,9 +89,12 @@ class SearchSessionBase(ABC):
         headers = self._gen_headers(headers) | self._create_cookies_header(cookies)
         proxy = proxy or self._proxy
 
-        async with self._session.get(self._init_url, headers=headers, proxy=proxy,
-                                     ssl=self._ssl) as resp:
-            cookies = {k: v.value for k, v in resp.cookies.items()}
+        try:
+            async with self._session.get(self._init_url, headers=headers, proxy=proxy,
+                                        ssl=self._ssl) as resp:
+                cookies = {k: v.value for k, v in resp.cookies.items()}
+        except aiohttp.ClientError as e:
+            raise ClientError(str(e))
         self._cookies |= cookies
         self._initialized = True
 
