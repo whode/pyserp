@@ -11,8 +11,10 @@ This module defines the abstractions for:
 import warnings
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
+from urllib.parse import urlencode
 
 import aiohttp
+from yarl import URL
 
 from .exceptions.session import ClientError, StatusCodeError
 from .models.session import GS_ResponseModel
@@ -132,7 +134,9 @@ class SearchSessionBase(ABC):
 
         serp = GS_ResponseModel()
         try:
-            async with self._session.get(self._search_url, params=params, headers=headers,
+            query_string = urlencode(params)
+            url = URL(f"{self._search_url}?{query_string}", encoded=True)
+            async with self._session.get(url, headers=headers,
                                          proxy=proxy, ssl=self._ssl) as resp:
                 if resp.status != 200:
                     debug_info = [prev_resp.request_info
