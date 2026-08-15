@@ -86,7 +86,7 @@ class GoogleSearchSessionsManager(SearchSessionsManagerBase[GoogleSearchSession]
         super().__init__(sessions, connector, headers, cookies, params, proxies, ssl,
                          apply_default_headers, apply_default_cookies, switch_period)
 
-    async def get_search_session(self, initialize: bool = True) -> GoogleSearchSession:
+    async def get_search_session(self, initialize: bool = False) -> GoogleSearchSession:
         return await super().get_search_session(initialize)
 
 
