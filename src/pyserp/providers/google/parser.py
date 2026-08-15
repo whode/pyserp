@@ -122,7 +122,7 @@ class GSERP_Parser(SERP_Parser_Base[GSERP_Model]):
         """
         Parses Google SERP layout version 2 (Legacy Mobile/Desktop).
 
-        This layout is characterized by the `kCrYT` class structure and requires
+        This layout is characterized by the `lQigmf` class structure and requires
         manual URL decoding (cleaning Google's redirect wrapper).
 
         Args:
@@ -138,16 +138,16 @@ class GSERP_Parser(SERP_Parser_Base[GSERP_Model]):
         main_div = bpage.find("div", id="main")
         for div in main_div.find_all("div", recursive=False)[1:]:
             try:
-                if div.find("div", class_="DnJfK"):
-                    result = {}
-                    part_items = div.find_all("div", class_="kCrYT")
+                result = {}
+                part_items = div.find_all("div", class_="lQigmf")
+                if part_items:
                     first_part_item = part_items[0]
                     try:
                         a = first_part_item.find("a")
                         result["url"] = self.parse_url(a, "url=")
                         h3 = a.find("h3")
                         result["title"] = h3.text
-                        breadcrumbs_item = a.find("div", class_="sCuL3")
+                        breadcrumbs_item = a.find("div", class_="AKfAgb")
                         result["breadcrumbs"] = breadcrumbs_item.text
                     except (AttributeError, KeyError, IndexError) as e:
                         raise type(e)(f"Error while parsing the link <- {e}")
